@@ -95,6 +95,9 @@ bool ReadFileToDatum(const string& filename, const int label, Datum* datum);
 inline bool ReadFileToDatum(const string& filename, Datum* datum) {
   return ReadFileToDatum(filename, -1, datum);
 }
+bool MBReadImageToDatum(const string& filename, const vector<double>& labels,
+                        const int height, const int width, const bool is_color,
+                        const std::string& encoding, Datum* datum);
 
 bool ReadImageToDatum(const string& filename, const int label,
     const int height, const int width, const bool is_color,

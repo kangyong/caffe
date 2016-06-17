@@ -116,6 +116,45 @@ static bool matchExt(const std::string & fn,
   return false;
 }
 
+bool MBReadImageToDatum(const string& filename, const vector<double>& labels,
+                        const int height, const int width, const bool is_color,
+                        const std::string& encoding, Datum* datum){
+    cv::Mat cv_img = ReadImageToCVMat(filename, height, width, is_color);
+    datum->clear_lf_label();
+    //std::cout << datum->lf_label_size() << std::endl;
+    if (cv_img.data) {
+        if (encoding.size()) {
+            if ( (cv_img.channels() == 3) == is_color && !height && !width &&
+                 matchExt(filename, encoding) ){
+                CHECK_EQ(0, 1);
+                return false;//ReadFileToDatum(filename, label, datum);
+            }
+            std::vector<uchar> buf;
+            cv::imencode("."+encoding, cv_img, buf);
+            datum->set_data(std::string(reinterpret_cast<char*>(&buf[0]),
+                            buf.size()));
+            //datum->set_label(label);
+            for(size_t i = 0; i < labels.size(); ++i){
+                datum->add_lf_label(labels[i]);
+            }
+            datum->set_encoded(true);
+            return true;
+        }
+        CVMatToDatum(cv_img, datum);
+        for(size_t i = 0; i < labels.size(); ++i){
+            datum->add_lf_label(labels[i]);
+        }
+        //datum->set_label(label);
+        // Now the size is not only the 4.
+        //CHECK_EQ(labels.size(), 4);
+        //CHECK_EQ(datum->lf_label_size(), 4);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 bool ReadImageToDatum(const string& filename, const int label,
     const int height, const int width, const bool is_color,
     const std::string & encoding, Datum* datum) {
