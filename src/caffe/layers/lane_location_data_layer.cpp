@@ -6,24 +6,24 @@
 #include <vector>
 
 #include "caffe/data_transformer.hpp"
-#include "caffe/layers/location_finer_data_layer.hpp"
+#include "caffe/layers/lane_location_data_layer.hpp"
 #include "caffe/util/benchmark.hpp"
 
 namespace caffe {
 
 template <typename Dtype>
-LocationFinerDataLayer<Dtype>::LocationFinerDataLayer(const LayerParameter& param)
+LaneLocationDataLayer<Dtype>::LaneLocationDataLayer(const LayerParameter& param)
   : BasePrefetchingDataLayer<Dtype>(param),
     reader_(param) {
 }
 
 template <typename Dtype>
-LocationFinerDataLayer<Dtype>::~LocationFinerDataLayer() {
+LaneLocationDataLayer<Dtype>::~LaneLocationDataLayer() {
   this->StopInternalThread();
 }
 
 template <typename Dtype>
-void LocationFinerDataLayer<Dtype>::DataLayerSetUp(const vector<Blob<Dtype>*>& bottom,
+void LaneLocationDataLayer<Dtype>::DataLayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
   const int batch_size = this->layer_param_.data_param().batch_size();
   // Read a data point, and use it to initialize the top blob.
@@ -62,7 +62,7 @@ void LocationFinerDataLayer<Dtype>::DataLayerSetUp(const vector<Blob<Dtype>*>& b
 
 // This function is called on prefetch thread
 template<typename Dtype>
-void LocationFinerDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
+void LaneLocationDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
   CPUTimer batch_timer;
   batch_timer.Start();
   double read_time = 0;
@@ -120,7 +120,7 @@ void LocationFinerDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
   DLOG(INFO) << "Transform time: " << trans_time / 1000 << " ms.";
 }
 
-INSTANTIATE_CLASS(LocationFinerDataLayer);
-REGISTER_LAYER_CLASS(LocationFinerData);
+INSTANTIATE_CLASS(LaneLocationDataLayer);
+REGISTER_LAYER_CLASS(LaneLocationData);
 
 }  // namespace caffe

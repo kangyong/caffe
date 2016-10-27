@@ -27,6 +27,11 @@ message BlobProtoVector {
   repeated BlobProto blobs = 1;
 }
 
+message MultiDatum{
+  repeated Datum data = 1;
+  repeated float labels = 2;
+}
+
 message Datum {
   optional int32 channels = 1;
   optional int32 height = 2;
@@ -38,7 +43,7 @@ message Datum {
   repeated float float_data = 6;
   // If true data contains an encoded image that need to be decoded
   optional bool encoded = 7 [default = false];
-  repeated float lf_label = 8;
+  repeated float labels = 8;
 }
 
 message FillerParameter {
@@ -308,6 +313,7 @@ message ParamSpec {
 // Update the next available ID when you add a new LayerParameter field.
 //
 // LayerParameter next available layer-specific ID: 147 (last added: recurrent_param)
+// MBCV: 147 (Unidataparameter)
 message LayerParameter {
   optional string name = 1; // the layer name
   optional string type = 2; // the layer type
@@ -404,6 +410,7 @@ message LayerParameter {
   optional ThresholdParameter threshold_param = 128;
   optional TileParameter tile_param = 138;
   optional WindowDataParameter window_data_param = 129;
+  optional UniDataParameter uni_data_param = 147;
 }
 
 // Message that stores parameters used to apply transformation
@@ -658,6 +665,18 @@ message DataParameter {
   // data access bandwidth varies).
   optional uint32 prefetch = 10 [default = 4];
 }
+
+message UniDataParameter {
+  repeated UniDataShape data_shape = 1;
+  repeated UniDataShape labels_shape = 2;
+}
+
+message UniDataShape {
+  optional uint32 channels = 1 [default = 1];
+  optional uint32 width = 2;
+  optional uint32 height = 3;
+}
+
 
 message DropoutParameter {
   optional float dropout_ratio = 1 [default = 0.5]; // dropout ratio

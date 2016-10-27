@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iostream>  // NOLINT(readability/streams)
 #include <string>
+#include <opencv2/core/core.hpp>
 
 #include "google/protobuf/message.h"
 
@@ -91,18 +92,30 @@ inline void WriteProtoToBinaryFile(
 }
 
 bool ReadFileToDatum(const string& filename, const int label, Datum* datum);
-
+bool ReadFileToDatum(const string& filename, const vector<float>& labels, Datum* datum);
 inline bool ReadFileToDatum(const string& filename, Datum* datum) {
   return ReadFileToDatum(filename, -1, datum);
 }
 bool MBReadImageToDatum(const string& filename, const vector<double>& labels,
                         const int height, const int width, const bool is_color,
                         const std::string& encoding, Datum* datum);
+bool LaneReadImageToDatum(const string& filename, const vector<double>& labels,
+                        const int height, const int width, const bool is_color,
+                        const std::string& encoding, Datum* datum);
 
 bool ReadImageToDatum(const string& filename, const int label,
     const int height, const int width, const bool is_color,
     const std::string & encoding, Datum* datum);
-
+bool ReadImageToDatum(const string& filename, const int label,
+    const int height, const int width, const bool is_color,
+    const std::string & encoding, Datum* datum, const cv::Rect& roi);
+bool ReadImageToDatum(const string& filename, const vector<float>& labels,
+    const int height, const int width, const bool is_color,
+    const std::string & encoding, Datum* datum);
+bool ReadImageToDatum(const string& filename, const vector<float>& labels,
+    const int height, const int width, const bool is_color,
+    const std::string & encoding, Datum* datum, const cv::Rect& roi);
+    
 inline bool ReadImageToDatum(const string& filename, const int label,
     const int height, const int width, const bool is_color, Datum* datum) {
   return ReadImageToDatum(filename, label, height, width, is_color,

@@ -3,6 +3,8 @@
 
 #include "caffe/data_reader.hpp"
 #include "caffe/layers/base_data_layer.hpp"
+#include "caffe/blobdata_reader.hpp"
+#include "caffe/layers/blob_data_layer.hpp"
 #include "caffe/parallel.hpp"
 #include "caffe/util/blocking_queue.hpp"
 
@@ -90,6 +92,10 @@ template class BlockingQueue<Batch<float>*>;
 template class BlockingQueue<Batch<double>*>;
 template class BlockingQueue<Datum*>;
 template class BlockingQueue<shared_ptr<DataReader::QueuePair> >;
+template class BlockingQueue<BlobBatch<float>*>;
+template class BlockingQueue<BlobBatch<double>*>;
+template class BlockingQueue<MultiDatum*>;
+template class BlockingQueue<shared_ptr<BlobDataReader::QueuePair> >;
 template class BlockingQueue<P2PSync<float>*>;
 template class BlockingQueue<P2PSync<double>*>;
 
