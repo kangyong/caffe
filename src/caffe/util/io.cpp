@@ -115,7 +115,25 @@ static bool matchExt(const std::string & fn,
     return true;
   return false;
 }
-
+bool LaneReadImageToDatum(const string& filename, const vector<double>& labels,
+                        const int height, const int width, const bool is_color,
+                        const std::string& encoding, Datum* datum){
+    cv::Mat cv_img = ReadImageToCVMat(filename, height, width, is_color);
+    datum->clear_lf_label();
+    if(cv_img.data){
+        if(encoding.size()){
+            std::cout<<"Nend to add encodig code"<<std::endl;
+            return false;
+        }              
+        CVMatToDatum(cv_img, datum);
+        for(size_t i = 0; i < labels.size(); ++i){
+            datum->add_lf_label(labels[i]);
+        }
+        return true;
+    }else{
+        return false;
+    }
+}
 bool MBReadImageToDatum(const string& filename, const vector<double>& labels,
                         const int height, const int width, const bool is_color,
                         const std::string& encoding, Datum* datum){
